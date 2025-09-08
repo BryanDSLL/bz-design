@@ -3,8 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HiChevronDoubleDown, HiCheckCircle, HiClock, HiLightBulb, HiDeviceTablet, HiChevronLeft, HiChevronRight, HiSun, HiMoon } from 'react-icons/hi2';
 import { FaWhatsapp, FaEnvelope, FaRocket, FaPalette, FaCode, FaMobile, FaVideo } from 'react-icons/fa';
-import LogoLight from '../assets/bz-clara.png';
-import LogoDark from '../assets/bz-escura.png';
+import LogoClara from '../assets/bz-clara.png';
+import LogoEscura from '../assets/bz-escura.png';
 import emailjs from 'emailjs-com';
 
 import { projectsData } from '../data/projetos.js';
@@ -118,7 +118,7 @@ function Services() {
       <div id="inicio" className="w-full min-h-[100vh] flex flex-col md:flex-row items-center justify-center p-6 gap-8 relative">
         <div className="relative mt-10 z-20 flex flex-col justify-center items-center w-full md:w-4/10">
           <img
-            src={logoTheme === 'dark' ? LogoDark : LogoLight}
+            src={logoTheme === 'dark' ? LogoEscura : LogoClara}
             alt={logoTheme === 'dark' ? 'Logo Escura' : 'Logo Clara'}
             className="w-80 h-80 rounded-full object-cover border-4 border-white shadow-lg transition-all duration-500"
           />
