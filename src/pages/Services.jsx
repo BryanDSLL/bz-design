@@ -45,14 +45,14 @@ function Services() {
 
     emailjs
       .send(
-        "seu_service_id_aqui",   // ← Substitua pelos seus IDs
-        "seu_template_id_aqui",
+        "service_9juv799",    
+        "template_dw3r6ow",      
         {
           from_name: form.nome,
           from_email: form.email,
           message: form.mensagem,
         },
-        "seu_user_id_aqui"
+        "1SMiRCc2hriY-ZrAS"
       )
       .then(() => {
         setStatus("Mensagem enviada com sucesso!");
