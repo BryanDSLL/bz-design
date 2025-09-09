@@ -10,6 +10,7 @@ export const projectsData = [
     id: 1,
     title: "DentalCare",
     description: "Sistema de agendamento para clínica odontológica com interface moderna e responsiva.",
+    url: "https://dentalcare-pearl.vercel.app/", 
     technologies: [
       { name: "React", color: "bg-blue-600/20 text-blue-400" },
       { name: "Vite", color: "bg-green-600/20 text-green-400" },
@@ -27,6 +28,7 @@ export const projectsData = [
     id: 2,
     title: "Bra.IA",
     description: "Chatbot conectado a LLMs para uso como assistente pessoal.",
+    url: "https://bra-ia.vercel.app/", 
     technologies: [
       { name: "React", color: "bg-blue-600/20 text-blue-400" },
       { name: "Next.js", color: "bg-gray-600/20 text-gray-400" },
@@ -44,6 +46,7 @@ export const projectsData = [
     id: 3,
     title: "Hotel Boutique",
     description: "Landing page",
+    url: "https://hotel-boutique.vercel.app/", 
     technologies: [
       { name: "React", color: "bg-blue-600/20 text-blue-400" },
       { name: "Next.js", color: "bg-gray-600/20 text-gray-400" },
@@ -60,6 +63,7 @@ export const projectsData = [
     id: 4,
     title: "Black Canvas Studio",
     description: "Landing page",
+    url: "https://black-canvas-studio.vercel.app/", // Adicione a URL aqui
     technologies: [
       { name: "React", color: "bg-blue-600/20 text-blue-400" },
       { name: "Next.js", color: "bg-gray-600/20 text-gray-400" },

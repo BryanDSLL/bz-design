@@ -320,7 +320,11 @@ function Services() {
             };
             
             return (
-              <div key={project.id} className="group bg-white/5 backdrop-blur border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform hover:scale-[1.02]">
+              <div 
+                key={project.id} 
+                className="group bg-white/5 backdrop-blur border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer"
+                onClick={() => project.url && window.open(project.url, '_blank', 'noopener,noreferrer')}
+              >
                 <div className="aspect-video bg-gray-800 relative overflow-hidden">
                   <div className="w-full h-full relative">
                     {/* Renderização dinâmica de mídia */}
@@ -395,7 +399,16 @@ function Services() {
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3">{project.title}</h3>
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-bold">{project.title}</h3>
+                    {project.url && (
+                      <div className="text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-gray-300 text-sm mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tech, index) => (
@@ -404,6 +417,11 @@ function Services() {
                       </span>
                     ))}
                   </div>
+                  {project.url && (
+                    <div className="mt-4 text-blue-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      Clique para visitar o projeto →
+                    </div>
+                  )}
                 </div>
               </div>
             );
