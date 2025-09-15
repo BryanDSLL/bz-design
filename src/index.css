@@ -28,7 +28,6 @@ body {
   display: flex;
   justify-content: space-between;
   pointer-events: none;
-  z-index: 0;
 }
 
 .line {

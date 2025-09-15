@@ -11,7 +11,7 @@ function AppContent() {
   return (
     <div className="animated-gradient-bg min-h-screen flex flex-col relative">
       {showHeader && <Header />}
-      <div className="lines z-0">
+      <div className="lines z-10">
         <div className="line"></div>
         <div className="line"></div>
         <div className="line"></div>
