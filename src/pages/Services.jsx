@@ -25,7 +25,10 @@ function Services() {
 
   const [form, setForm] = useState({
     nome: "",
+    telefone: "",
     email: "",
+    assunto: "",
+    tipoServico: "",
     mensagem: "",
   });
   const [status, setStatus] = useState("");
@@ -44,14 +47,17 @@ function Services() {
         "template_dw3r6ow",      
         {
           from_name: form.nome,
+          from_phone: form.telefone,
           from_email: form.email,
+          subject: form.assunto,
+          service_type: form.tipoServico,
           message: form.mensagem,
         },
         "1SMiRCc2hriY-ZrAS"
       )
       .then(() => {
         setStatus("Mensagem enviada com sucesso!");
-        setForm({ nome: "", email: "", mensagem: "" });
+        setForm({ nome: "", telefone: "", email: "", assunto: "", tipoServico: "", mensagem: "" });
         setShowForm(false);
       })
       .catch(() => {
@@ -563,6 +569,21 @@ function Services() {
                     />
                   </div>
                   <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Telefone (WhatsApp)</label>
+                    <input
+                      type="tel"
+                      name="telefone"
+                      placeholder="(21) 99999-9999"
+                      value={form.telefone}
+                      onChange={handleChange}
+                      required
+                      className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-200 hover:bg-white/10"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">E-mail</label>
                     <input
                       type="email"
@@ -574,6 +595,36 @@ function Services() {
                       className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-200 hover:bg-white/10"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Assunto</label>
+                    <input
+                      type="text"
+                      name="assunto"
+                      placeholder="Assunto da mensagem"
+                      value={form.assunto}
+                      onChange={handleChange}
+                      required
+                      className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-200 hover:bg-white/10"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Tipo de Serviço</label>
+                  <select
+                    name="tipoServico"
+                    value={form.tipoServico}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-200 hover:bg-white/10"
+                  >
+                    <option value="" className="bg-gray-800 text-gray-300">Selecione o tipo de serviço</option>
+                    <option value="Sites Profissionais" className="bg-gray-800 text-white">Sites Profissionais</option>
+                    <option value="Landing Pages" className="bg-gray-800 text-white">Landing Pages</option>
+                    <option value="Aplicativos Web" className="bg-gray-800 text-white">Aplicativos Web</option>
+                    <option value="Mídias Digitais" className="bg-gray-800 text-white">Mídias Digitais</option>
+                    <option value="Outros" className="bg-gray-800 text-white">Outros</option>
+                  </select>
                 </div>
                 
                 <div>
