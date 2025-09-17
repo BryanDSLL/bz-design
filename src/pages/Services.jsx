@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { HiChevronDoubleDown, HiCheckCircle, HiClock, HiLightBulb, HiDeviceTablet, HiChevronLeft, HiChevronRight, HiSun, HiMoon } from 'react-icons/hi2';
 import { FaWhatsapp, FaEnvelope, FaRocket, FaPalette, FaCode, FaMobile, FaVideo } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { projectsData } from '../data/projetos.js';
 import Logo from '../assets/bz-logo.png';
 import emailjs from 'emailjs-com';
