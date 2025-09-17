@@ -33,6 +33,7 @@ function Services() {
   });
   const [status, setStatus] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -40,6 +41,8 @@ function Services() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true); 
+    setStatus(""); 
 
     emailjs
       .send(
@@ -58,10 +61,13 @@ function Services() {
       .then(() => {
         setStatus("Mensagem enviada com sucesso!");
         setForm({ nome: "", telefone: "", email: "", assunto: "", tipoServico: "", mensagem: "" });
-        setShowForm(false);
+        // Removido: setShowForm(false); - não fecha mais o formulário
       })
       .catch(() => {
         setStatus("Erro ao enviar a mensagem.");
+      })
+      .finally(() => {
+        setIsLoading(false); // Para o carregamento
       });
   };
 
@@ -531,17 +537,17 @@ function Services() {
             href="https://wa.me/5521990390610?text=Olá! Gostaria de conversar sobre um projeto" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
+            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2"
           >
-            <FaWhatsapp className="text-xl" />
-            Chamar no WhatsApp
+            <FaWhatsapp className="text-sm" />
+            WhatsApp
           </a>
           <button 
             onClick={() => setShowForm(!showForm)}
-            className="border-2 border-white hover:bg-white hover:text-black px-8 py-4 rounded-lg text-base font-medium transition-all duration-300 flex items-center gap-3"
+            className="border-2 border-white hover:bg-white hover:text-black px-4 py-2 rounded-lg text-base font-medium transition-all duration-300 flex items-center gap-3"
           >
-            <FaEnvelope className="text-xl" />
-            {showForm ? 'Fechar Formulário' : 'Enviar E-mail'}
+            <FaEnvelope className="text-sm" />
+            Formulário de Contato
           </button>
         </div>
 
@@ -564,8 +570,11 @@ function Services() {
                       placeholder="Digite seu nome"
                       value={form.nome}
                       onChange={handleChange}
+                      disabled={isLoading}
                       required
-                      className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-200 hover:bg-white/10"
+                      className={`w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-200 hover:bg-white/10 ${
+                        isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     />
                   </div>
                   <div>
@@ -680,20 +689,13 @@ function Services() {
                     <FaWhatsapp className="text-sm" />
                     WhatsApp
                   </a>
-                  <a 
-                    href="mailto:bryandaimex@gmail.com" 
-                    className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2"
-                  >
-                    <FaEnvelope className="text-sm" />
-                    E-mail Direto
-                  </a>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        <div className="mt-12 text-center">
+        <div className="mt-10 text-center">
           <p className="text-base font-normal text-gray-300 mb-4">Resposta garantida em até 24 horas!</p>
           <div className="flex justify-center items-center gap-2 text-yellow-400">
             <FaRocket className="text-lg" />
