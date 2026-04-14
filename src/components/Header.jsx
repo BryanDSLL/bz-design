@@ -1,12 +1,24 @@
+import { useState, useEffect } from 'react';
+import gsap from 'gsap';
+
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      window.scrollTo({
-        top: section.offsetTop - 64,
-        behavior: 'smooth'
-      });
+      // Small delay ensures lenis catches up if we just loaded
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
     }
   };
 
@@ -15,34 +27,31 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 shadow-md bg-black/30 backdrop-blur">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div onClick={() => scrollToSection('inicio')} className="flex items-center space-x-2 cursor-pointer">
-          <span className="text-sm md:text-lg font-semibold text-white">BZ Web Design</span>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-black/80 backdrop-blur-md py-4 shadow-2xl shadow-black/50 border-b border-white/5' : 'bg-transparent py-6'}`}>
+      <nav className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between">
+        <div onClick={() => scrollToSection('inicio')} className="magnetic flex items-center space-x-2">
+          <span className="text-sm md:text-base font-bold uppercase tracking-widest text-white">Bryan Zimbrão</span>
         </div>
 
-        <div className="flex md:flex-row space-x-2 md:space-x-8 items-center">
+        <div className="hidden md:flex space-x-12 items-center">
           <button 
             onClick={() => scrollToSection('vantagens')} 
-            className="text-white hover:text-gray-300 text-xs md:text-base transition-colors duration-200 font-medium cursor-pointer"
-          >
-            Vantagens
-          </button>
-          <button 
-            onClick={() => scrollToSection('servicos')} 
-            className="text-white hover:text-gray-300 text-xs md:text-base transition-colors duration-200 font-medium cursor-pointer"
+            className="magnetic text-zinc-400 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300 font-semibold"
           >
             Serviços
           </button>
           <button 
             onClick={() => scrollToSection('projetos')} 
-            className="text-white hover:text-gray-300 text-xs md:text-base transition-colors duration-200 font-medium cursor-pointer"
+            className="magnetic text-zinc-400 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300 font-semibold"
           >
-            Projetos
+            Showcase
           </button>
+        </div>
+
+        <div>
           <button 
             onClick={handleContratarClick}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs md:text-base font-medium transition-all duration-300 transform hover:scale-105"
+            className="magnetic border border-white/20 hover:border-white bg-transparent text-white hover:bg-white hover:text-black px-6 py-2.5 rounded-full text-xs uppercase tracking-widest font-bold transition-all duration-300"
           >
             Contrate
           </button>
