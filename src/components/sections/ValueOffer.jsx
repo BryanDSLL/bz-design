@@ -69,7 +69,7 @@ export default function ValueOffer() {
   }, [pillars]);
 
   return (
-    <section ref={sectionRef} className="w-full bg-[#030303] py-40 px-6 lg:px-12 relative z-10 border-t border-white/5">
+    <section id="proposta" ref={sectionRef} className="w-full bg-[#030303] py-40 px-6 lg:px-12 relative z-10 border-t border-white/5">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         
         <div ref={textRef} className="text-center max-w-4xl mb-24">
@@ -97,7 +97,10 @@ export default function ValueOffer() {
         </div>
 
         <button 
-          onClick={() => document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' })}
+          onClick={() => {
+            const el = document.getElementById('contato');
+            if (el) window.lenis ? window.lenis.scrollTo(el) : el.scrollIntoView({ behavior: 'smooth' });
+          }}
           className="magnetic relative group overflow-hidden rounded-full p-[1px] cursor-pointer hover:scale-105 transition-transform duration-300"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-zinc-500 via-white to-zinc-500 rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-300"></span>

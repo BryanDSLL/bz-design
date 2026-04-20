@@ -15,10 +15,13 @@ export default function Header() {
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      // Small delay ensures lenis catches up if we just loaded
-      setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
+      if (window.lenis) {
+        window.lenis.scrollTo(section);
+      } else {
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      }
     }
   };
 
@@ -38,13 +41,25 @@ export default function Header() {
             onClick={() => scrollToSection('vantagens')} 
             className="magnetic text-zinc-400 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300 font-semibold"
           >
-            Serviços
+            Vantagens
           </button>
           <button 
             onClick={() => scrollToSection('projetos')} 
             className="magnetic text-zinc-400 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300 font-semibold"
           >
-            Showcase
+            Destaques
+          </button>
+          <button 
+            onClick={() => scrollToSection('galeria')} 
+            className="magnetic text-zinc-400 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300 font-semibold"
+          >
+            Galeria
+          </button>
+          <button 
+            onClick={() => scrollToSection('proposta')} 
+            className="magnetic text-zinc-400 hover:text-white text-xs uppercase tracking-widest transition-colors duration-300 font-semibold"
+          >
+            Proposta
           </button>
         </div>
 

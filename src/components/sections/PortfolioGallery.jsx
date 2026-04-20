@@ -1,139 +1,120 @@
 import { useEffect, useRef, useState } from 'react';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { projectsData } from '../../data/projetos';
-
-gsap.registerPlugin(ScrollTrigger);
+import { MacbookScroll } from '../ui/macbook-scroll';
 
 export default function PortfolioGallery() {
-  const containerRef = useRef(null);
-  const scrollWrapperRef = useRef(null);
-
-  // Initialize the horizontal scroll using GSAP
+  const sectionRef = useRef(null);
+  const [sectionH, setSectionH] = useState(
+    typeof window !== 'undefined' ? window.innerHeight * 2 : 1400
+  );
   useEffect(() => {
-    let ctx = gsap.context(() => {
-      const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-      
-      if (isDesktop && containerRef.current && scrollWrapperRef.current) {
-        // Robust calculation of scrollable width
-        const getScrollAmount = () => {
-          // Use scrollWidth but ensure we subtract clientWidth
-          return scrollWrapperRef.current.scrollWidth - window.innerWidth;
-        };
-
-        let scrollAmount = getScrollAmount();
-
-        const horizontalTween = gsap.to(scrollWrapperRef.current, {
-          x: () => -getScrollAmount(),
-          ease: "none"
-        });
-
-        const st = ScrollTrigger.create({
-          trigger: containerRef.current,
-          start: "top top",
-          end: () => `+=${getScrollAmount()}`,
-          pin: true,
-          animation: horizontalTween,
-          scrub: true,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        });
-
-        // Use ResizeObserver to catch layout shifts (images loading, viewport changes)
-        const ro = new ResizeObserver(() => {
-          scrollAmount = getScrollAmount();
-          st.refresh();
-        });
-        ro.observe(scrollWrapperRef.current);
-
-        // Global refreshes as fallbacks
-        const refreshAll = () => {
-          ScrollTrigger.refresh();
-        };
-
-        window.addEventListener('load', refreshAll);
-        setTimeout(refreshAll, 1000);
-        setTimeout(refreshAll, 3000);
-
-        return () => {
-          ro.disconnect();
-          window.removeEventListener('load', refreshAll);
-        };
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
+    if (sectionRef.current) setSectionH(sectionRef.current.offsetHeight);
   }, []);
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // ── Badge + Title ────────────────────────────────────────────────
+  const groupScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.8]);
+  const groupY = useTransform(scrollYProgress, [0, 1], [0, 1100]);
+  const groupOpacity = useTransform(scrollYProgress, [0.25, 0.38], [1, 0]);
+
+  // ── Screen dim overlay ───────────────────────────────────────────
+  const dimOpacity = useTransform(
+    scrollYProgress,
+    [0.32, 0.48, 0.70, 0.80],
+    [0, 0.55, 0.55, 0]
+  );
+  const dimStickY = useTransform(scrollYProgress, [0, 1], [0, sectionH]);
+
+  // ── Description + button ─────────────────────────────────────────
+  const descOpacity = useTransform(
+    scrollYProgress,
+    [0.24, 0.40, 0.68, 0.75],
+    [0, 1, 1, 0]
+  );
+  const descSlideY = useTransform(scrollYProgress, [0.24, 0.40], [20, 0]);
+
+  const project = projectsData[0];
+
   return (
-    <section ref={containerRef} id="projetos" className="w-full bg-black py-20 lg:py-0 text-white overflow-hidden relative lg:h-screen">
-      <div className="absolute top-10 left-6 lg:left-12 z-20 mix-blend-difference pointer-events-none">
+    <section
+      ref={sectionRef}
+      id="projetos"
+      className="w-full bg-[#0B0B0F] text-white relative"
+    >
+      {/* Showcase watermark */}
+      <div className="overflow-hidden absolute top-10 left-6 lg:left-12 z-0 mix-blend-difference pointer-events-none">
         <h2 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter opacity-10">Showcase</h2>
       </div>
 
-      <div 
-        ref={scrollWrapperRef}
-        className="flex flex-col lg:flex-row h-full lg:h-screen items-center px-6 lg:px-20 gap-16 lg:gap-32 w-max lg:pl-32 py-20 lg:py-0"
+      {/* ── Badge + Title overlay ─────────────────────────────────── */}
+      <motion.div
+        className="hidden lg:flex absolute left-0 right-0 flex-col items-center pointer-events-none"
+        style={{ top: '320px', zIndex: 50, scale: groupScale, y: groupY, opacity: groupOpacity }}
       >
-        <div className="project-panel w-screen lg:w-[40vw] flex flex-col justify-center flex-shrink-0 mb-10 lg:mb-0">
-          <h3 className="text-4xl lg:text-7xl font-bold uppercase leading-none mb-6">Trabalhos<br/><span className="text-zinc-600">Seletos</span></h3>
-          <p className="text-zinc-400 font-sans max-w-sm text-lg">
-            Um olhar sobre a fusão entre técnica e estética. Arraste ou role para explorar.
-          </p>
-        </div>
+        <span className="px-5 py-1.5 rounded-full bg-blue-500/40 text-blue-200 border border-blue-400/60 font-black text-sm uppercase tracking-[0.2em] backdrop-blur-md mb-4">
+          Projeto Destaque
+        </span>
+        <span className="text-5xl lg:text-7xl font-black text-white" style={{ textShadow: '0 2px 30px rgba(0,0,0,0.8)' }}>
+          {project.title}
+        </span>
+      </motion.div>
 
-        {projectsData.map((project, idx) => (
-          <div key={project.id} className="project-panel w-full lg:w-[60vw] h-[60vh] lg:h-[70vh] flex-shrink-0 group relative overflow-hidden rounded-2xl cursor-pointer" onClick={() => project.url && window.open(project.url, '_blank', 'noopener,noreferrer')}>
-            {/* Media */}
-            <div className="w-full h-full relative overflow-hidden bg-zinc-900">
-              {project.media.length > 0 ? (
-                project.media[0].type === 'video' ? (
-                  <video 
-                    className="w-full h-full object-cover origin-center opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-in-out"
-                    autoPlay muted loop playsInline
-                  >
-                    <source src={project.media[0].src} type="video/mp4" />
-                  </video>
-                ) : (
-                  <img 
-                    src={project.media[0].src}
-                    alt={project.media[0].alt}
-                    className="w-full h-full object-cover origin-center opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-in-out"
-                  />
-                )
-              ) : (
-                <div className={`w-full h-full bg-gradient-to-br flex items-center justify-center opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-in-out ${project.fallbackColor}`}>
-                   <project.fallbackIcon className={`text-6xl ${project.iconColor}`} />
-                </div>
-              )}
+      {/* ── MacBook component ─────────────────────────────────────── */}
+      <div className="relative z-10 w-full hidden lg:block bg-[#0B0B0F] dark:bg-[#0B0B0F]">
+        <MacbookScroll
+          src={project.media[0].src}
+          badge={null}
+          title={<span />}
+          showGradient={false}
+        >
+          {/* Dimmer backdrop inside the screen */}
+          <motion.div
+            style={{ opacity: dimOpacity }}
+            className="absolute inset-0 bg-black/60 rounded-xl"
+          />
+
+          {/* Overlays Wrapper inside the screen */}
+          <motion.div
+            style={{ opacity: descOpacity, y: descSlideY }}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+          >
+            {/* Top-Left Description Box (Floating Outside the Left Edge) */}
+            <div className="absolute top-8 right-[calc(100%+3rem)] w-[300px] bg-white/[0.05] backdrop-blur-xl border border-white/20 rounded-2xl p-5 text-left shadow-[0_0_20px_rgba(255,255,255,0.15)] pointer-events-auto transition-shadow hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]">
+              <h3 className="text-base font-bold text-white mb-3 leading-tight drop-shadow-md">
+                Gestão Clínica Digital
+              </h3>
+              <p className="text-[12px] text-zinc-300 leading-relaxed font-medium">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
             </div>
-            
-            {/* Data Overlay */}
-            <div className="absolute inset-x-0 bottom-0 p-8 lg:p-12 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-wrap lg:flex-nowrap items-end justify-between gap-4">
-              <div>
-                <h4 className="text-3xl lg:text-5xl font-bold uppercase mb-2">{project.title}</h4>
-                <p className="text-zinc-300 font-sans mb-4 text-sm lg:text-base max-w-lg">{project.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, tIdx) => (
-                    <span key={tIdx} className={`px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider backdrop-blur-md bg-white/10 ${tech.color}`}>
-                      {tech.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              {project.url && (
-                <div className="flex-shrink-0 w-16 h-16 rounded-full border border-white/30 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-300 -rotate-45 group-hover:rotate-0">
-                  <span className="text-2xl font-light">→</span>
-                </div>
-              )}
+
+            {/* Bottom-Right Button (Floating Outside the Right Edge) */}
+            <div className="absolute bottom-8 left-[calc(100%+3rem)] w-[500px] pointer-events-auto">
+              <motion.a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/20 hover:border-white/40 text-white text-[12px] font-semibold backdrop-blur-xl transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] group"
+              >
+                Ver Projeto
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 drop-shadow-lg"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </motion.a>
             </div>
-          </div>
-        ))}
-        
-        {/* Spacer at end */}
-        <div className="project-panel w-[10vw] flex-shrink-0 hidden lg:block"></div>
+          </motion.div>
+        </MacbookScroll>
       </div>
     </section>
   );

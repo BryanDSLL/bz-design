@@ -12,7 +12,7 @@ function AppContent() {
   const showHeader = location.pathname === '/';
 
   return (
-    <div className="min-h-screen flex flex-col relative w-full overflow-hidden text-zinc-100 bg-black selection:bg-white selection:text-black">
+    <div className="min-h-screen flex flex-col relative w-full overflow-x-hidden text-zinc-100 bg-black selection:bg-white selection:text-black">
       {/* Premium Noise Overlay */}
       <div className="noise-overlay"></div>
       
@@ -56,6 +56,9 @@ export default function App() {
       touchMultiplier: 2,
       infinite: false,
     });
+
+    // Expose lenis globally for synchronized scroll navigation
+    window.lenis = lenis;
 
     // Synchronize Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
