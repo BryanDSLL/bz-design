@@ -12,7 +12,7 @@ function AppContent() {
   const showHeader = location.pathname === '/';
 
   return (
-    <div className="min-h-screen flex flex-col relative w-full overflow-x-hidden text-zinc-100 bg-black selection:bg-white selection:text-black">
+    <div className="min-h-screen flex flex-col relative w-full overflow-clip text-zinc-100 bg-black selection:bg-white selection:text-black">
       {/* Premium Noise Overlay */}
       <div className="noise-overlay"></div>
       
